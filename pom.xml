@@ -30,11 +30,34 @@
         <mvn.source.version>3.2.1</mvn.source.version>
     </properties>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>actable</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>xlvchao</name>
+            <email>chao9038@gmail.com</email>
+            <organization>https://github.com/xlvchao</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <tag>master</tag>
+        <url>https://github.com/xlvchao/clickhouse-highlevel-sinker</url>
+        <connection>git@github.com:xlvchao/clickhouse-highlevel-sinker.git</connection>
+        <developerConnection>git@github.com:xlvchao/clickhouse-highlevel-sinker.git</developerConnection>
+    </scm>
+
     <distributionManagement>
-        <repository>
-            <id>maven-public</id>
-            <url>http://cmc.cloudartifact.dragon.tools.hihonor.com/artifactory/maven-public/</url>
-        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -90,14 +113,53 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${mvn.source.version}</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 生成javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
