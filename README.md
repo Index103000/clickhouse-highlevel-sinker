@@ -158,30 +158,31 @@ public class InterfaceLog {
 **定义Sink:**
 
 ```java
-import ClickHouseSinkManager;
-import Sink;
-import InterfaceLog;
+import com.hihonor.aiops.clickhouse.component.ClickHouseSinkManager;
+import com.hihonor.aiops.clickhouse.component.Sink;
+import com.hihonor.aiops.clickhouse.pojo.InterfaceLog;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
 import java.util.Properties;
 
-public class ClickHouseRichSink extends RichSinkFunction<InterfaceLog> {
+
+public class FlinkSinkDemo extends RichSinkFunction<InterfaceLog> {
     private volatile static transient ClickHouseSinkManager sinkManager;
     private transient Sink sink;
 
-    public ClickHouseRichSink() {
+    public FlinkSinkDemo() {
     }
 
     @Override
     public void open(Configuration config) {
         // DCL单例模式
         if (sinkManager == null) {
-            synchronized (ClickHouseRichSink.class) {
+            synchronized (FlinkSinkDemo.class) {
                 if (sinkManager == null) {
                     Properties properties = new Properties();
-                    properties.put("clickhouse.hikari.username", "username");
-                    properties.put("clickhouse.hikari.password", "password");
+                    properties.put("clickhouse.hikari.username", "root");
+                    properties.put("clickhouse.hikari.password", "AigWNjWH");
                     properties.put("clickhouse.hikari.addresses", "10.68.178.71:8123,10.68.177.248:8123");
                     properties.put("clickhouse.hikari.minimumIdle", "5");
                     properties.put("clickhouse.hikari.maximumPoolSize", "10");
@@ -194,7 +195,7 @@ public class ClickHouseRichSink extends RichSinkFunction<InterfaceLog> {
                 }
             }
         }
-        sink = sinkManager.buildSink(InterfaceLog.class, 3, 1000);
+        sink = sinkManager.buildSink(InterfaceLog.class,  3,1000);
     }
 
     @Override
@@ -212,7 +213,7 @@ public class ClickHouseRichSink extends RichSinkFunction<InterfaceLog> {
             sink.close();
         }
         if (sinkManager != null && !sinkManager.isClosed()) {
-            synchronized (ClickHouseRichSink.class) {
+            synchronized (FlinkSinkDemo.class) {
                 if (sinkManager != null && !sinkManager.isClosed()) {
                     sinkManager.close();
                     sinkManager = null;
