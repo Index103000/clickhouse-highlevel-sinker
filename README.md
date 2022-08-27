@@ -4,7 +4,7 @@
 
 ## 1、简介
 
-ClickHouse的Java客户端SDK，支持在 **Springboot 和 Flink** 中使用，人性化、灵活的配置、高性能、极简依赖！
+ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性化、灵活的配置、高性能、极简依赖！
 
 
 
@@ -100,7 +100,7 @@ public class ClickHouseConfig {
         properties.put("clickhouse.hikari.maximumPoolSize", "10");
 
         properties.put("clickhouse.sink.queueMaxCapacity", "1000"); //公共消费队列容量（即最大能承载多少批次），默认是1000
-        properties.put("clickhouse.sink.writeTimeout", "3"); //写超时时间（单位秒），即当Buffer的中数据超过该时间还未被flush则立马刷到上述公共消费队列中，默认是3
+        properties.put("clickhouse.sink.writeTimeout", "3"); //写超时时间（单位秒），即当Buffer中数据超过该时间还未被flush则立马刷到上述公共消费队列中，默认是3
         properties.put("clickhouse.sink.retryTimes", "3"); //下沉到CK时如果失败的重试次数，默认是3
         properties.put("clickhouse.sink.ignoreSinkExceptionEnabled", "true"); //下沉到CK时是否忽略写异常，默认为true
         return new ClickHouseSinkManager(properties);
@@ -188,7 +188,7 @@ public class FlinkSinkDemo extends RichSinkFunction<InterfaceLog> {
                     properties.put("clickhouse.hikari.maximumPoolSize", "10");
 
                     properties.put("clickhouse.sink.queueMaxCapacity", "1000"); //公共消费队列容量（即最大能承载多少批次），默认是1000
-                    properties.put("clickhouse.sink.writeTimeout", "3"); //写超时时间（单位秒），即当Buffer的中数据超过该时间还未被flush则立马刷到上述公共消费队列中，默认是3
+                    properties.put("clickhouse.sink.writeTimeout", "3"); //写超时时间（单位秒），即当Buffer中数据超过该时间还未被flush则立马刷到上述公共消费队列中，默认是3
                     properties.put("clickhouse.sink.retryTimes", "3"); //下沉到CK时如果失败的重试次数，默认是3
                     properties.put("clickhouse.sink.ignoreSinkExceptionEnabled", "true"); //下沉到CK时是否忽略写异常，默认为true
                     sinkManager = new ClickHouseSinkManager(properties);
