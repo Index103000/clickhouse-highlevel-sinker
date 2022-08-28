@@ -13,6 +13,7 @@
     <description>
         High Performance SDK for Batch Write ClickHouse Database!
     </description>
+    <url>https://github.com/xlvchao/clickhouse-highlevel-sinker</url>
 
     <properties>
         <!-- Primary components -->
@@ -64,6 +65,7 @@
         </repository>
     </distributionManagement>
 
+
     <dependencies>
         <dependency>
             <groupId>ru.yandex.clickhouse</groupId>
@@ -101,7 +103,6 @@
         </resources>
 
         <plugins>
-            <!-- 编译打包 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -112,7 +113,6 @@
                 </configuration>
             </plugin>
 
-            <!-- 上传源码 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -125,6 +125,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -145,7 +157,7 @@
                 <version>1.5</version>
                 <executions>
                     <execution>
-                        <id>gpg2</id>
+                        <id>sign-artifacts</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
