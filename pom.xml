@@ -60,7 +60,6 @@
         </repository>
     </distributionManagement>
 
-
     <dependencies>
         <dependency>
             <groupId>ru.yandex.clickhouse</groupId>
