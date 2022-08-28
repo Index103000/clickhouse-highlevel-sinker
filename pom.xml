@@ -13,7 +13,6 @@
     <description>
         High Performance SDK for Batch Write ClickHouse Database!
     </description>
-    <url>https://github.com/xlvchao/clickhouse-highlevel-sinker</url>
 
     <properties>
         <!-- Primary components -->
@@ -25,10 +24,6 @@
         <logback.version>1.2.3</logback.version>
         <guava.version>23.0</guava.version>
         <hikari.version>4.0.3</hikari.version>
-
-        <!-- Plugins version -->
-        <mvn.compiler.version>3.8.1</mvn.compiler.version>
-        <mvn.source.version>3.2.1</mvn.source.version>
     </properties>
 
     <licenses>
@@ -107,7 +102,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${mvn.compiler.version}</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
@@ -117,7 +112,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>${mvn.source.version}</version>
+                    <version>3.2.1</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -168,7 +163,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
     </build>
 
 </project>
