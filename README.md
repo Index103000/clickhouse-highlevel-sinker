@@ -16,7 +16,7 @@ ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性�
 <dependency>
     <groupId>com.xlvchao.clickhouse</groupId>
     <artifactId>clickhouse-highlevel-sinker</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -228,6 +228,10 @@ public class FlinkSinkDemo extends RichSinkFunction<InterfaceLog> {
 
 
 ## 3、更新日志
+
+### 1.0.4
+- 优化代码
+- 落库时准备参数阶段，针对LocalDateTime类型做了兼容
 
 ### 1.0.3
 - 优化代码
