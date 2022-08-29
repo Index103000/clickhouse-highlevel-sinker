@@ -10,7 +10,7 @@ ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性�
 
 ## 2、使用方式
 
-### 2.1 项目pom.xml中引入依赖：
+### 2.1 引入依赖
 
 ```xml
 <dependency>
