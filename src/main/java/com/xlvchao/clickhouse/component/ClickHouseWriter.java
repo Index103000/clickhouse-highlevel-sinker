@@ -277,6 +277,8 @@ public class ClickHouseWriter implements AutoCloseable {
                     Object value = field.get(object);
                     if (value != null && type == Date.class) {
                         value = DateTimeUtil.formatDate((Date) value);
+                    } else if (value != null && type == LocalDateTime.class) {
+                        value = DateTimeUtil.formatLocalDateTime((LocalDateTime) value);
                     }
                     prepareStatement.setObject(j+1, value);
                 }
