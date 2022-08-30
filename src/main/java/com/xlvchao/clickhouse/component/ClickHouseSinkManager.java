@@ -85,6 +85,8 @@ public class ClickHouseSinkManager implements AutoCloseable {
                     newDataSources.add(genHikariDataSource(properties));
                 });
 
+                serverNodes.clear();
+                serverNodes.addAll(newServerNodes);
                 dataSources.clear();
                 dataSources.addAll(newDataSources);
             }
