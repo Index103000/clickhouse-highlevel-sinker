@@ -1,12 +1,12 @@
 package com.xlvchao.clickhouse.component;
 
 import com.google.common.collect.Lists;
-import com.hihonor.aiops.clickhouse.model.ClickHouseSettings;
-import com.hihonor.aiops.clickhouse.model.ClickHouseSinkRequest;
-import com.hihonor.aiops.clickhouse.util.DateTimeUtil;
-import com.hihonor.aiops.clickhouse.util.FutureUtil;
-import com.hihonor.aiops.clickhouse.util.TableUtil;
-import com.hihonor.aiops.clickhouse.util.ThreadUtil;
+import com.xlvchao.clickhouse.model.ClickHouseSettings;
+import com.xlvchao.clickhouse.model.ClickHouseSinkRequest;
+import com.xlvchao.clickhouse.util.DateTimeUtil;
+import com.xlvchao.clickhouse.util.FutureUtil;
+import com.xlvchao.clickhouse.util.TableUtil;
+import com.xlvchao.clickhouse.util.ThreadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

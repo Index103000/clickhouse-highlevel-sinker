@@ -1,13 +1,13 @@
 package com.xlvchao.clickhouse.component;
 
 import com.google.common.base.Preconditions;
-import com.hihonor.aiops.clickhouse.datasource.ServerNode;
-import com.hihonor.aiops.clickhouse.util.ThreadUtil;
+import com.xlvchao.clickhouse.datasource.ServerNode;
+import com.xlvchao.clickhouse.model.ClickHouseSettings;
+import com.xlvchao.clickhouse.util.ThreadUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.hihonor.aiops.clickhouse.model.ClickHouseSettings;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
