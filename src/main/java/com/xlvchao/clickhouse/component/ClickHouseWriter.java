@@ -1,15 +1,12 @@
 package com.xlvchao.clickhouse.component;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.xlvchao.clickhouse.model.ClickHouseSettings;
-import com.xlvchao.clickhouse.model.ClickHouseSinkRequest;
-import com.xlvchao.clickhouse.util.DateTimeUtil;
-import com.xlvchao.clickhouse.util.FutureUtil;
-import com.xlvchao.clickhouse.util.TableUtil;
-import com.xlvchao.clickhouse.util.ThreadUtil;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.hihonor.aiops.clickhouse.model.ClickHouseSettings;
+import com.hihonor.aiops.clickhouse.model.ClickHouseSinkRequest;
+import com.hihonor.aiops.clickhouse.util.DateTimeUtil;
+import com.hihonor.aiops.clickhouse.util.FutureUtil;
+import com.hihonor.aiops.clickhouse.util.TableUtil;
+import com.hihonor.aiops.clickhouse.util.ThreadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +16,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ClickHouseWriter implements AutoCloseable {
@@ -32,77 +31,18 @@ public class ClickHouseWriter implements AutoCloseable {
     private List<WriterTask> writeTasks;
     private final BlockingQueue<ClickHouseSinkRequest> commonQueue;
     private final AtomicLong queueCounter = new AtomicLong();
-    private final List<DataSource> dataSources = Collections.synchronizedList(new ArrayList<>());
+    private final List<DataSource> dataSources;
     private final List<CompletableFuture<Boolean>> futures;
     private final ClickHouseSettings clickHouseSettings;
-    private static final String PREFIX = "jdbc:clickhouse://";
-    private static final String SUFFIX = "?socket_timeout=3600000&max_execution_time=3600";
 
 
-    public ClickHouseWriter(int threadNum, Properties properties, List<CompletableFuture<Boolean>> futures) {
+    public ClickHouseWriter(int threadNum, Properties properties, List<CompletableFuture<Boolean>> futures, List<DataSource> dataSources) {
         this.clickHouseSettings = new ClickHouseSettings(properties);
         this.futures = futures;
+        this.dataSources = dataSources;
         this.commonQueue = new LinkedBlockingQueue<>(clickHouseSettings.getQueueMaxCapacity());
-        initHikariDataSource(properties);
         buildWriters(threadNum);
     }
-
-    public void initHikariDataSource(Properties properties) {
-        try {
-            Preconditions.checkNotNull(properties);
-
-            String addresses = properties.getProperty("clickhouse.hikari.addresses");
-            String username = properties.getProperty("clickhouse.hikari.username");
-            String password = properties.getProperty("clickhouse.hikari.password");
-            String minimumIdle = properties.getProperty("clickhouse.hikari.minimumIdle", "1");
-            String maximumPoolSize = properties.getProperty("clickhouse.hikari.maximumPoolSize", "5");
-
-            Preconditions.checkNotNull(addresses);
-            Preconditions.checkNotNull(username);
-            Preconditions.checkNotNull(password);
-
-            String [] ipPorts =  addresses.split(",");
-            for(String ipPort : ipPorts) {
-                Properties prop = new Properties();
-                prop.put("jdbcUrl", PREFIX.concat(ipPort).concat(SUFFIX));
-                prop.put("username", username);
-                prop.put("password", password);
-                prop.put("minimumIdle", minimumIdle);
-                prop.put("maximumPoolSize", maximumPoolSize);
-                prop.put("poolName", "aiops-hikari-ds-" + ipPort.substring(0, ipPort.indexOf(":")));
-                dataSources.add(genHikariDataSource(prop));
-            }
-        } catch (Exception e) {
-            logger.error("Init Hikari DataSource For ClickHouse Error!", e);
-        }
-    }
-
-    public HikariDataSource genHikariDataSource(Properties properties) {
-        // 连接池配置
-        HikariConfig config = new HikariConfig();
-        //连接池名
-        config.setPoolName(properties.getProperty("poolName"));
-        // 最小空闲连接数
-        config.setMinimumIdle(Integer.parseInt(properties.getProperty("minimumIdle")));
-        // 最大连接数
-        config.setMaximumPoolSize(Integer.parseInt(properties.getProperty("maximumPoolSize")));
-        // 此属性控制从池中拿到的连接的默认自动提交行为，默认值：true
-        config.setAutoCommit(false);
-        // 空闲连接存活最大时间
-        config.setIdleTimeout(MINUTES.toMillis(10));
-        // 池中连接的最长存活时间，值0表示无限存活时间
-        config.setMaxLifetime(MINUTES.toMillis(30));
-        // 数据库连接超时时间，默认30秒
-        config.setConnectionTimeout(SECONDS.toMillis(30));
-        //测试链接是否可用的sql语句
-        config.setConnectionTestQuery("SELECT 1");
-        //账号设置
-        config.setJdbcUrl(properties.getProperty("jdbcUrl"));
-        config.setUsername(properties.getProperty("username"));
-        config.setPassword(properties.getProperty("password"));
-        return new HikariDataSource(config);
-    }
-
 
     private void buildWriters(int threadNum) {
         try {
@@ -281,11 +221,13 @@ public class ClickHouseWriter implements AutoCloseable {
                     } else if (value != null && type == LocalDateTime.class) {
                         value = DateTimeUtil.formatLocalDateTime((LocalDateTime) value);
                     }
+
                     prepareStatement.setObject(j+1, value);
                 }
                 prepareStatement.addBatch();
             }
         }
+
 
         private void handleUnsuccessfulResponse(ClickHouseSinkRequest sinkRequest, CompletableFuture<Boolean> future) {
             int currentCounter = sinkRequest.getAttemptCounter();
