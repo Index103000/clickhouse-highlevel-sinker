@@ -4,7 +4,7 @@
 
 ## 1、简介
 
-ClickHouse批量写SDK，支持在**Springboot、Flink**等框架中使用，承担着我司日均千亿级别数据的批量落库，人性化、高性能、极简依赖！
+ClickHouse批量写SDK，支持在**Springboot、Flink**等框架中使用，承担着我司日均千亿级别数据的落库任务，人性化、高性能、极简依赖！
 
 
 
