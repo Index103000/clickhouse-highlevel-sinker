@@ -4,7 +4,9 @@
 
 ## 1、简介
 
-ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性化、灵活的配置、高性能、极简依赖！
+**简介：** ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性化、灵活的配置、高性能、极简依赖！
+
+**背景：** 为了极大地减小ZK的压力，采用“读写分离”方案，即写本地表、读分布式表；写本地表时采用的默认负载均衡策略是轮询，这样可使数据比较均匀的分布在各个分片上，尽量避免数据倾斜情况的发生！
 
 
 
@@ -31,7 +33,7 @@ import TableName;
 import lombok.Data;
 
 @Data
-@TableName("aiops_local.interfacelog")
+@TableName("aiops_local.interfacelog") //想要达到前文介绍的读写分离效果，这里必须使用本地表。格式：database.table
 public class InterfaceLog {
     private String product; //业务
     private String service; //服务
@@ -124,7 +126,7 @@ import TableName;
 import lombok.Data;
 
 @Data
-@TableName("aiops_local.interfacelog")
+@TableName("aiops_local.interfacelog") //想要达到前文介绍的读写分离效果，这里必须使用本地表。格式：database.table
 public class InterfaceLog {
     private String product; //业务
     private String service; //服务
