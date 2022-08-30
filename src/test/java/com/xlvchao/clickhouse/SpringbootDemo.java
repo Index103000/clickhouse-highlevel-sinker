@@ -18,7 +18,7 @@ public class SpringbootDemo {
         Properties properties = new Properties();
         properties.put("clickhouse.hikari.username", "root");
         properties.put("clickhouse.hikari.password", "password");
-        properties.put("clickhouse.hikari.addresses", "10.68.178.71:8123,10.68.177.248:8123");
+        properties.put("clickhouse.hikari.address", "10.68.178.71:8123");
         properties.put("clickhouse.hikari.minimumIdle", "10");
         properties.put("clickhouse.hikari.maximumPoolSize", "150");
 
