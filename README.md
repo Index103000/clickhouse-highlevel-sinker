@@ -16,7 +16,7 @@ ClickHouse批量写SDK，支持在 **Springboot 和 Flink** 中使用，人性�
 <dependency>
     <groupId>com.xlvchao.clickhouse</groupId>
     <artifactId>clickhouse-highlevel-sinker</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
@@ -95,7 +95,7 @@ public class ClickHouseConfig {
         Properties properties = new Properties();
         properties.put("clickhouse.hikari.username", "username");
         properties.put("clickhouse.hikari.password", "password");
-        properties.put("clickhouse.hikari.addresses", "10.68.178.71:8123,10.68.177.248:8123");
+        properties.put("clickhouse.hikari.address", "10.68.178.71:8123"); //代理地址 or 集群中任一节点地址
         properties.put("clickhouse.hikari.minimumIdle", "5");
         properties.put("clickhouse.hikari.maximumPoolSize", "10");
 
@@ -183,7 +183,7 @@ public class FlinkSinkDemo extends RichSinkFunction<InterfaceLog> {
                     Properties properties = new Properties();
                     properties.put("clickhouse.hikari.username", "root");
                     properties.put("clickhouse.hikari.password", "AigWNjWH");
-                    properties.put("clickhouse.hikari.addresses", "10.68.178.71:8123,10.68.177.248:8123");
+                    properties.put("clickhouse.hikari.address", "10.68.178.71:8123"); //代理地址 or 集群中任一节点地址
                     properties.put("clickhouse.hikari.minimumIdle", "5");
                     properties.put("clickhouse.hikari.maximumPoolSize", "10");
 
@@ -228,6 +228,10 @@ public class FlinkSinkDemo extends RichSinkFunction<InterfaceLog> {
 
 
 ## 3、更新日志
+
+### 1.0.5
+- 优化代码
+- 初始化数据源时通过代理查询集群IP列表来构造数据源，并增加定时更新数据源机制
 
 ### 1.0.4
 - 优化代码
